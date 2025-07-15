@@ -1,0 +1,148 @@
+{# @var ea \EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext #}
+{# @var entities \EasyCorp\Bundle\EasyAdminBundle\Collection\EntityCollection #}
+{# @var paginator \EasyCorp\Bundle\EasyAdminBundle\Orm\EntityPaginator #}
+{% extends ea.templatePath('layout') %}
+{% trans_default_domain ea.i18n.translationDomain %}
+
+{% block body_id entities|length > 0 ? 'ea-index-' ~ entities|first.name : '' %}
+{% block body_class 'ea-index' ~ (entities|length > 0 ? ' ea-index-' ~ entities|first.name : '') %}
+
+{% set ea_field_assets = ea.crud.fieldAssets(constant('EasyCorp\\Bundle\\EasyAdminBundle\\Config\\Crud::PAGE_INDEX')) %}
+
+	{% block configured_head_contents %}
+	{{ parent() }}
+		{% for htmlContent in ea_field_assets.headContents %}
+	{{ htmlContent|raw }}
+{% endfor %}
+{% endblock %}
+
+	{% block configured_body_contents %}
+	{{ parent() }}
+		{% for htmlContent in ea_field_assets.bodyContents %}
+	{{ htmlContent|raw }}
+{% endfor %}
+{% endblock %}
+
+	{% block configured_stylesheets %}
+	{{ parent() }}
+	{{ include('@EasyAdmin/includes/_css_assets.html.twig', { assets: ea_field_assets.cssAssets }, with_context = false) }}
+{{ include('@EasyAdmin/includes/_encore_link_tags.html.twig', { assets: ea_field_assets.webpackEncoreAssets }, with_context = false) }}
+{% endblock %}
+
+	{% block configured_javascripts %}
+	{{ parent() }}
+	{{ include('@EasyAdmin/includes/_js_assets.html.twig', { assets: ea_field_assets.jsAssets }, with_context = false) }}
+{{ include('@EasyAdmin/includes/_encore_script_tags.html.twig', { assets: ea_field_assets.webpackEncoreAssets }, with_context = false) }}
+{% endblock %}
+
+	{% block content_title %}
+	{%- set custom_page_title = ea.crud.customPageTitle('index', null, ea.i18n.translationParameters, ea.i18n.translationDomain) -%}
+{{- custom_page_title is null
+        ? ea.crud.defaultPageTitle('index', null, ea.i18n.translationParameters)|trans|raw
+        : custom_page_title|trans|raw -}}
+{% endblock %}
+
+{% set has_batch_actions = batch_actions|length > 0 %}
+	{% block page_actions %}
+		{% if filters|length > 0 %}
+			<div class="datagrid-filters"> {% block filters %}
+				{% set applied_filters = ea.request.query.all['filters']|default([])|keys %}
+				<div class="btn-group action-filters">
+					<a href="#" data-href="{{ ea_url().setAction('renderFilters') }}" class="btn btn-secondary btn-labeled btn-labeled-right action-filters-button disabled {{ applied_filters ? 'action-filters-applied' }}" data-bs-toggle="modal" data-bs-target="#modal-filters">
+						<i class="fa fa-filter fa-fw"></i>
+						{{ t('filter.title', ea.i18n.translationParameters, 'EasyAdminBundle')|trans }}
+						{% if applied_filters %}
+							<span class="action-filters-button-count">({{ applied_filters|length }})</span>
+						{% endif %}
+					</a>
+					{% if applied_filters %}
+						<a href="{{ ea_url().unset('filters') }}" class="btn btn-secondary action-filters-reset">
+							<i class="fa fa-close"></i>
+						</a>
+					{% endif %}
+				</div>
+			{% endblock filters %}
+		</div>
+	{% endif %}
+
+	{% block global_actions %}
+		<div class="global-actions">
+			{% for action in global_actions %}
+				{{ include(action.templatePath, { action: action }, with_context = false) }}
+			{% endfor %}
+		</div>
+	{% endblock global_actions %}
+	{% block batch_actions %}
+		{% if has_batch_actions %}
+			<div class="batch-actions d-none">
+				{% for action in batch_actions %}
+					{{ include(action.templatePath, { action: action }, with_context = false) }}
+				{% endfor %}
+			</div>
+		{% endif %}
+	{% endblock %}
+{% endblock page_actions %}
+
+{% block main %}
+	{# sort can be multiple; let's consider the sorting field the first one #}
+	{% set sort_field_name = app.request.get('sort')|keys|first %}
+	{% set sort_order = app.request.get('sort')|first %}
+	{% set some_results_are_hidden = entities|reduce((some_results_are_hidden, entity) => some_results_are_hidden or not entity.isAccessible, false) %}
+	{% set has_footer = entities|length != 0 %}
+	{% set has_search = ea.crud.isSearchEnabled %}
+	{% set has_filters = filters|length > 0 %}
+	{% set num_results = entities|length %}
+	<div class="col-12">
+		<div class="card">
+			<div class="card-body">
+				<ul class="nav nav-tabs nav-bordered" role="tablist">
+					{% set active ="active" %}
+
+					{% for category in categories %}
+						<li class="nav-item {{active}}" role="presentation">
+							<a href="#{{ category.name|lower|replace({' ': '-'}) }}" data-bs-toggle="tab" aria-expanded="{{ loop.first ? 'true' : 'false' }}" class="nav-link {{ loop.first ? 'active' : '' }}" aria-selected="{{ loop.first ? 'true' : 'false' }}" role="tab">
+								{{ category.name }}
+							</a>
+						</li>
+						{% set active ="" %}
+
+					{% endfor %}
+				</ul>
+				<div class="tab-content">
+					{% set active ="active"%}
+					{% set i = 1 %}
+					{% for category in categories %}
+						<div class="tab-pane {{active}}" id="{{ category.name|lower|replace({' ': '-'}) }}" role="tabpanel">
+							{% set active ="" %}
+
+							<div class="accordion custom-accordion" id="custom-accordion-one">
+								
+								{% for entity in category.knowledgebases %}
+									<div class="card mb-0">
+										<div class="card-header" id="heading{{i}}">
+											<h5 class="m-0 position-relative">
+												<a class="custom-accordion-title text-reset d-block" data-bs-toggle="collapse" href="#collapse{{i}}" aria-expanded="false" aria-controls="collapse{{i}}">
+													{{entity.name}}<i class="mdi mdi-chevron-down accordion-arrow"></i>
+												</a>
+											</h5>
+										</div>
+
+										<div id="collapse{{i}}" class="collapse" aria-labelledby="headingFour" data-bs-parent="#custom-accordion-one">
+											<div class="card-body knowledgebase">
+												{% if hasActionRightTo('edit', entity) %}
+													<a href="{{ea_url().setController('Prolyfix\\KnowledgebaseBundle\\Controller\\Admin\\KnowledgebaseCrudController').setEntityId(entity.id).setAction('edit')}}" class="btn- btn-xs btn-secondary">{% trans %}Edit{% endtrans %}</a>
+												{% endif %}
+												{{entity.description | raw}}
+											</div>
+										</div>
+									</div>
+									{% set i = i + 1 %}
+								{% endfor %}
+							</div>
+						</div>
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock main %}
