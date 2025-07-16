@@ -37,10 +37,10 @@ class KnowledgebaseCrudController extends BaseCrudController
         return $crud
             ->setPageTitle('index', 'Knowledgebase')
             ->overrideTemplates([
-                'crud/index' => '@ProlyfixKnowledgebaseBundle/knowledgebase/index.html.twig',
+                'crud/index' => '@ProlyfixKnowledgebase/knowledgebase/index.html.twig',
             ])
                         ->overrideTemplates([
-                'crud/detail' => '@ProlyfixKnowledgebaseBundle/knowledgebase/detail.html.twig',
+                'crud/detail' => '@ProlyfixKnowledgebase/knowledgebase/detail.html.twig',
             ]);
     }
     public function index(AdminContext $context)
