@@ -41,7 +41,8 @@ class KnowledgebaseCrudController extends BaseCrudController
             ])
                         ->overrideTemplates([
                 'crud/detail' => '@ProlyfixKnowledgebase/knowledgebase/detail.html.twig',
-            ]);
+            ])
+            ;
     }
     public function index(AdminContext $context)
     {

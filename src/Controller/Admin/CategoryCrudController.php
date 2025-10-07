@@ -3,6 +3,7 @@
 namespace Prolyfix\KnowledgebaseBundle\Controller\Admin;
 
 use BcMath\Number;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use Prolyfix\KnowledgebaseBundle\Entity\Category;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
@@ -31,5 +32,9 @@ class CategoryCrudController extends AbstractCrudController
 
         ];
     }
-    
+    public function configureCrud(Crud $crud): Crud
+    {
+        return $crud
+            ->setDefaultSort(['position' => 'ASC']);
+    }
 }
