@@ -3,15 +3,15 @@
 namespace Prolyfix\KnowledgebaseBundle\Entity;
 
 use Prolyfix\KnowledgebaseBundle\Entity\Category;
-use App\Entity\TimeData;
+use Prolyfix\HolidayAndTime\Entity\TimeData;
 use Doctrine\DBAL\Types\Types;
 use ApiPlatform\Metadata\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Bundle\SecurityBundle\Security;
 use Prolyfix\KnowledgebaseBundle\Repository\KnowledgebaseRepository;
-use App\Attribute\SearchableEntity;
-use App\Attribute\SearchableField;
+use Prolyfix\HolidayAndTime\Attribute\SearchableEntity;
+use Prolyfix\HolidayAndTime\Attribute\SearchableField;
 
 #[ORM\Entity(repositoryClass: KnowledgebaseRepository::class)]
 #[ApiResource(

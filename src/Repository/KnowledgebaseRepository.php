@@ -2,7 +2,7 @@
 
 namespace Prolyfix\KnowledgebaseBundle\Repository;
 
-use App\Repository\SearchableTrait;
+use Prolyfix\HolidayAndTime\Repository\SearchableTrait;
 use Prolyfix\KnowledgebaseBundle\Entity\Knowledgebase;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;

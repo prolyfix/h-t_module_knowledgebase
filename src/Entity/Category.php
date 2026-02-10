@@ -2,8 +2,8 @@
 
 namespace Prolyfix\KnowledgebaseBundle\Entity;
 
-use App\Entity\TimeData;
-use App\Entity\Trait\PositionTrait;
+use Prolyfix\HolidayAndTime\Entity\TimeData;
+use Prolyfix\HolidayAndTime\Entity\Trait\PositionTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;

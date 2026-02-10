@@ -2,7 +2,7 @@
 
 namespace Prolyfix\KnowledgebaseBundle\Controller\Admin;
 
-use App\Controller\Admin\BaseCrudController;
+use Prolyfix\HolidayAndTime\Controller\Admin\BaseCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Asset;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
