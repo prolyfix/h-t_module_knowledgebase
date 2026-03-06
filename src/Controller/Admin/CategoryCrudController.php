@@ -26,7 +26,7 @@ class CategoryCrudController extends AbstractCrudController
                 ->setCustomOption('min', 0)
                 ->setCustomOption('max', 100)
                 ->setCustomOption('step', 1)
-                ->setTemplatePath('admin/field/position.html.twig'),
+                ->setTemplatePath('@ProlyfixHolidayAndTime/admin/field/position.html.twig'),
             TextField::new('name'),
             
 

@@ -2,6 +2,7 @@
 
 namespace Prolyfix\KnowledgebaseBundle\Entity;
 
+use Prolyfix\HolidayAndTime\Entity\Trait\AddToNewsTrait;
 use Prolyfix\KnowledgebaseBundle\Entity\Category;
 use Prolyfix\HolidayAndTime\Entity\TimeData;
 use Doctrine\DBAL\Types\Types;
@@ -21,6 +22,8 @@ use Prolyfix\HolidayAndTime\Attribute\SearchableField;
 #[SearchableEntity(controller: 'Prolyfix\KnowledgebaseBundle\Controller\Admin\KnowledgebaseCrudController')]
 class Knowledgebase extends TimeData
 {
+    use AddToNewsTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
