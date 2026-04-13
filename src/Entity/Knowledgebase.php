@@ -13,6 +13,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Prolyfix\KnowledgebaseBundle\Repository\KnowledgebaseRepository;
 use Prolyfix\HolidayAndTime\Attribute\SearchableEntity;
 use Prolyfix\HolidayAndTime\Attribute\SearchableField;
+use Prolyfix\QmBundle\Attribute\BelongToQm;
 
 #[ORM\Entity(repositoryClass: KnowledgebaseRepository::class)]
 #[ApiResource(
@@ -20,6 +21,7 @@ use Prolyfix\HolidayAndTime\Attribute\SearchableField;
     denormalizationContext: ['groups' => ['module_configuration_value:write']],
 )]
 #[SearchableEntity(controller: 'Prolyfix\KnowledgebaseBundle\Controller\Admin\KnowledgebaseCrudController')]
+#[BelongToQm]
 class Knowledgebase extends TimeData
 {
     use AddToNewsTrait;
