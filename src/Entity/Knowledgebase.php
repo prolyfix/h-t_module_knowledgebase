@@ -3,6 +3,7 @@
 namespace Prolyfix\KnowledgebaseBundle\Entity;
 
 use Prolyfix\HolidayAndTime\Entity\Trait\AddToNewsTrait;
+
 use Prolyfix\KnowledgebaseBundle\Entity\Category;
 use Prolyfix\HolidayAndTime\Entity\TimeData;
 use Doctrine\DBAL\Types\Types;
@@ -22,9 +23,12 @@ use Prolyfix\QmBundle\Attribute\BelongToQm;
 )]
 #[SearchableEntity(controller: 'Prolyfix\KnowledgebaseBundle\Controller\Admin\KnowledgebaseCrudController')]
 #[BelongToQm]
+#[\Vich\UploaderBundle\Mapping\Annotation\Uploadable]
 class Knowledgebase extends TimeData
 {
     use AddToNewsTrait;
+    use \Prolyfix\HolidayAndTime\Entity\Trait\VichMediaFileTrait;
+    
 
     #[ORM\Id]
     #[ORM\GeneratedValue]

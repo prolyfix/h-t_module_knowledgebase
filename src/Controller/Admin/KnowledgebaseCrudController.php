@@ -17,6 +17,8 @@ use Prolyfix\RssBundle\Entity\News;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Test\Constraint\ResponseHasCookie;
+use Vich\UploaderBundle\Form\Type\VichFileType;
+
 
 class KnowledgebaseCrudController extends BaseCrudController
 {
@@ -28,12 +30,18 @@ class KnowledgebaseCrudController extends BaseCrudController
 
     public function configureFields(string $pageName): iterable
     {
-        return [
+        $fields = [
             AssociationField::new('category')->renderAsNativeWidget(),
             TextField::new('name'),
             TextEditorField::new('description')->addJsFiles(Asset::new('/js/trix-upload.js')->onlyOnForms()),
-            BooleanField ::new('addToNews')->renderAsSwitch(false),
+            BooleanField::new('addToNews')->renderAsSwitch(false),
+                        TextField::new('file')
+                    ->onlyOnForms()
+                    ->setFormType(VichFileType::class)
         ];
+
+        // Add file upload for medium (images/videos only)
+        return $fields;
     }
     public function configureCrud(\EasyCorp\Bundle\EasyAdminBundle\Config\Crud $crud): \EasyCorp\Bundle\EasyAdminBundle\Config\Crud
     {

@@ -132,7 +132,20 @@
 												{% if hasActionRightTo('edit', entity) %}
 													<a href="{{ea_url().setController('Prolyfix\\KnowledgebaseBundle\\Controller\\Admin\\KnowledgebaseCrudController').setEntityId(entity.id).setAction('edit')}}" class="btn- btn-xs btn-secondary">{% trans %}Edit{% endtrans %}</a>
 												{% endif %}
-												{{entity.description | raw}}
+												{{ entity.description | raw }}
+												{% if entity.filename %}
+													{% set ext = entity.filename|split('.')|last|lower %}
+													{% if ext in ['jpg','jpeg','png','gif','webp','bmp','svg'] %}
+														<img src="{{ ea_url() .setController('Prolyfix\\HolidayAndTime\\Controller\\Admin\\MediaCrudController') .setAction('servePrivateFileByName') .set('fileName', entity.filename) }}" alt="medium" style="max-width:200px;max-height:200px;display:block;margin-top:10px;" />
+													{% elseif ext in ['mp4','webm','ogg','mov','avi'] %}
+														<video controls style="max-width:200px;max-height:200px;display:block;margin-top:10px;">
+															<source src="{{ ea_url() .setController('Prolyfix\\HolidayAndTime\\Controller\\Admin\\MediaCrudController') .setAction('servePrivateFileByName') .set('fileName', entity.filename) }}" type="video/{{ ext }}">
+															Your browser does not support the video tag.
+														</video>
+													{% else %}
+														<a href="{{ ea_url() .setController('Prolyfix\\HolidayAndTime\\Controller\\Admin\\MediaCrudController') .setAction('servePrivateFileByName') .set('fileName', entity.filename) }}" target="_blank">{{ entity.filename }}</a>
+													{% endif %}
+												{% endif %}
 											</div>
 										</div>
 									</div>
